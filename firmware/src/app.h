@@ -211,6 +211,7 @@ void APP_Initialize ( void );
  */
 
 void APP_Tasks( void );
+void APP_start_ble(void);   // JOE EDIT OR ADDITION
 
 //DOM-IGNORE-BEGIN
 #ifdef __cplusplus

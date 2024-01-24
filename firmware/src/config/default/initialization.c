@@ -174,6 +174,10 @@ SYSTEM_OBJECTS sysObj;
 // Section: Library/Stack Initialization Data
 // *****************************************************************************
 // *****************************************************************************
+#define QUEUE_LENGTH_BLE        (32)
+#define QUEUE_ITEM_SIZE_BLE     (sizeof(void *))
+OSAL_QUEUE_HANDLE_TYPE bleRequestQueueHandle;
+
 /*******************************************************************************
 * Copyright (C) 2022 Microchip Technology Inc. and its subsidiaries.
 *
@@ -373,6 +377,8 @@ void SYS_Initialize ( void* data )
     /* MISRAC 2012 deviation block start */
     /* MISRA C-2012 Rule 2.2 deviated in this file.  Deviation record ID -  H3_MISRAC_2012_R_2_2_DR_1 */
 
+    BT_SYS_Cfg_T        btSysCfg;
+
 /*******************************************************************************
 * Copyright (C) 2022 Microchip Technology Inc. and its subsidiaries.
 *
@@ -412,9 +418,9 @@ void SYS_Initialize ( void* data )
 
 	GPIO_Initialize();
 
-    SERCOM0_USART_Initialize();
-
     EVSYS_Initialize();
+
+    SERCOM0_USART_Initialize();
 
     TC0_TimerInitialize();
 
@@ -471,7 +477,7 @@ void SYS_Initialize ( void* data )
 *******************************************************************************/
     
     // Initialize RF System
-    SYS_Load_Cal(WSS_ENABLE_ZB);    // JOE EDIT OR ADDITION
+    SYS_Load_Cal(WSS_ENABLE_BLE_ZB);    // JOE EDIT OR ADDITION
  
     // Set up OSAL for RF Stack Library usage
     osalAPIList.OSAL_CRIT_Enter      = OSAL_CRIT_Enter;
@@ -502,6 +508,21 @@ void SYS_Initialize ( void* data )
     sysObj.sysConsole0 = SYS_CONSOLE_Initialize(SYS_CONSOLE_INDEX_0, (SYS_MODULE_INIT *)&sysConsole0Init);
 
 
+    // Create BLE Stack Message QUEUE
+    OSAL_QUEUE_Create(&bleRequestQueueHandle, QUEUE_LENGTH_BLE, QUEUE_ITEM_SIZE_BLE);
+
+    // Retrieve BLE calibration data
+    btSysCfg.addrValid = IB_GetBdAddr(&btSysCfg.devAddr[0]);
+    btSysCfg.rssiOffsetValid =IB_GetRssiOffset(&btSysCfg.rssiOffset);
+    btSysCfg.antennaGainValid = IB_GetAntennaGain(&btSysCfg.antennaGain);
+
+
+    // Initialize BLE Stack
+    BT_SYS_Init(&bleRequestQueueHandle, &osalAPIList, NULL, &btSysCfg);
+    
+
+
+
     /* Initialization for IEEE_802154_PHY */
 	OSAL_SEM_Create(&semPhyInternalHandler, OSAL_SEM_TYPE_COUNTING, 20, 0);
 	
@@ -509,6 +530,7 @@ void SYS_Initialize ( void* data )
     
     /* End of Initialization for IEEE_802154_PHY */
 
+    CRYPT_WCCB_Initialize();
 
     APP_Initialize();
 

@@ -42,19 +42,29 @@ void app_idle_task( void )
 {
     uint8_t PDS_Items_Pending = PDS_GetPendingItemsCount();
     bool RF_Cal_Needed = RF_NeedCal(); // device_support library API
+    uint8_t BT_RF_Suspended = 0;
 
     if (PDS_Items_Pending || RF_Cal_Needed)
     {
-        if (1) // TODO: Modify to evaluate to true only if application is idle
+        OSAL_CRITSECT_DATA_TYPE IntState;
+        IntState = OSAL_CRIT_Enter(OSAL_CRIT_TYPE_HIGH);
+        BT_RF_Suspended = BT_SYS_RfSuspendReq(1);
+        //once BT_RF_Suspended is true, BT internal RF_Suspend_Req_Flag will be set,
+        //and BT is forbidden to prepare RF.
+        OSAL_CRIT_Leave(OSAL_CRIT_TYPE_HIGH, IntState);
+
+
+        if (BT_RF_Suspended)
         {
             if (PDS_Items_Pending)
             {
                 PDS_StoreItemTaskHandler();
             }
-            else if (RF_Cal_Needed)
+            else if ((RF_Cal_Needed) && (BT_RF_Suspended == BT_SYS_RF_SUSPENDED_NO_SLEEP))
             {
-                RF_Timer_Cal(WSS_ENABLE_NONE);
+                RF_Timer_Cal(WSS_ENABLE_BLE);
             }
+            BT_SYS_RfSuspendReq(0);
         }
     }
 }

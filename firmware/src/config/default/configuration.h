@@ -124,6 +124,63 @@ extern "C" {
 // *****************************************************************************
 // *****************************************************************************
 
+/*** wolfCrypt Library Configuration ***/
+#define MICROCHIP_PIC32
+#define MICROCHIP_MPLAB_HARMONY
+#define MICROCHIP_MPLAB_HARMONY_3
+#define HAVE_MCAPI
+#define SIZEOF_LONG_LONG 8
+#define WOLFSSL_USER_IO
+#define NO_WRITEV
+#define NO_FILESYSTEM
+#define USE_FAST_MATH
+#define NO_PWDBASED
+#define HAVE_MCAPI
+#define WOLF_CRYPTO_CB  // provide call-back support
+#define WOLFCRYPT_ONLY
+#define WOLFSSL_HAVE_MCHP_HW_CRYPTO
+// ---------- CRYPTO HARDWARE MANIFEST START ----------
+#define WOLFSSL_HAVE_MCHP_HW_CRYPTO_ECC_HW_PUKCC
+#define WOLFSSL_HAVE_MCHP_HW_CRYPTO_AES_HW_U2238
+#define WOLFSSL_HAVE_MCHP_HW_CRYPTO_SHA_HW_11105
+#define WOLFSSL_HAVE_MCHP_HW_CRYPTO_SHA_HW_U2010
+#define WOLFSSL_HAVE_MCHP_HW_CRYPTO_TRNG_HW_U2242
+#define WOLFSSL_HAVE_MCHP_HW_CRYPTO_RSA_HW_PUKCC
+// ---------- CRYPTO HARDWARE MANIFEST END ----------
+// ---------- FUNCTIONAL CONFIGURATION START ----------
+#define NO_MD4
+#define NO_MD5
+#define NO_SHA // specifically, no SHA1 (legacy name)
+#define NO_SHA256
+#define NO_SHA224
+#define NO_HMAC
+#define NO_DES3
+#define WOLFSSL_AES_128
+#define NO_AES_192 // not supported by HW accelerator
+#define NO_AES_256 // not supported by HW accelerator
+#define WOLFSSL_AES_DIRECT
+#define HAVE_AES_DECRYPT
+#define WOLFSSL_HAVE_MCHP_HW_AES_DIRECT
+#define HAVE_AES_CBC
+#define WOLFSSL_HAVE_MCHP_HW_AES_CBC
+#define NO_RC4
+#define NO_HC128
+#define NO_RABBIT
+#define NO_DH
+#define NO_DSA
+#define NO_RSA
+#define NO_DEV_RANDOM
+#define WC_NO_RNG
+#define WC_NO_HASHDRBG
+#define WC_NO_HARDEN
+#define SINGLE_THREADED
+#define NO_ASN
+#define NO_SIG_WRAPPER
+#define NO_ERROR_STRINGS
+#define NO_WOLFSSL_MEMORY
+// ---------- FUNCTIONAL CONFIGURATION END ----------
+
+
 
 // *****************************************************************************
 // *****************************************************************************

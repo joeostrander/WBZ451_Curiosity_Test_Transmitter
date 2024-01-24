@@ -59,6 +59,11 @@
 // Section: RTOS "Tasks" Routine
 // *****************************************************************************
 // *****************************************************************************
+#define TASK_BLE_STACK_SIZE (2 *1024 / sizeof(portSTACK_TYPE))
+#define TASK_BLE_PRIORITY (tskIDLE_PRIORITY + 3)
+
+
+
 TaskHandle_t xSYS_CMD_Tasks;
 void _SYS_CMD_Tasks(  void *pvParameters  )
 {
@@ -119,7 +124,7 @@ void SYS_Tasks ( void )
         SYS_CMD_RTOS_STACK_SIZE,
         (void*)NULL,
         SYS_CMD_RTOS_TASK_PRIORITY,
-        &xSYS_CMD_Tasks
+        &xSYS_CMD_Tasks  /* JOE EDIT OR ADDITION */
     );
 
 
@@ -130,8 +135,13 @@ void SYS_Tasks ( void )
     
 
     /* Maintain Middleware & Other Libraries */
-        /* Create FreeRTOS task for IEEE_802154_PHY */
-	 xTaskCreate((TaskFunction_t) _PHY_Tasks,
+    
+    if (xTaskCreate(BM_Task,     "BLE", TASK_BLE_STACK_SIZE, NULL  , TASK_BLE_PRIORITY, NULL) != pdPASS)
+        while (1);
+
+    
+    /* Create FreeRTOS task for IEEE_802154_PHY */
+	xTaskCreate((TaskFunction_t) _PHY_Tasks,
                 "PHY_Tasks",
                 1024,
                 NULL,

@@ -109,6 +109,7 @@ static void phy_ConfigAntennaDiversity(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, ch
 static void phy_ConfigRxRPCMode(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char** argv);
 static void update_PER_test_packets(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char** argv);
 static void throughput_timer_update(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char** argv);
+static void ble(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char** argv);    // JOE EDIT OR ADDITION
 //CMD descriptor table definition
 static const SYS_CMD_DESCRIPTOR PhyCmdsTbl[] =
 {
@@ -167,6 +168,7 @@ static const SYS_CMD_DESCRIPTOR PhyCmdsTbl[] =
     {"configAntennaDiversity",phy_ConfigAntennaDiversity,"Configure the Antenna Diversity\r\n"},
     {"updateThroughputTime",throughput_timer_update,"Update Throughput Timer\r\n"},
     {"updatePERTestPacketsCnt",update_PER_test_packets,"Update PER test Packets\r\n"},
+    {"ble",ble,"start bluetooth\r\n"},
 };
 
 
@@ -1408,6 +1410,13 @@ static void setFrameTypes(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char** argv)
     }
     }
 }
+
+// JOE EDIT OR ADDITION START
+static void ble(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char** argv)
+{
+    APP_start_ble();
+}
+// JOE EDIT OR ADDITION END
 /**************************************************************************************************/
 
 bool appPhyCmdProcessor_StrToBool(const char *str, bool *res)

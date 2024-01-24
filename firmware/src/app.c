@@ -54,6 +54,8 @@
 #include <string.h>
 #include "app.h"
 #include "definitions.h"
+#include "app_ble.h"
+#include "ble_gap.h"
 
 // *****************************************************************************
 // *****************************************************************************
@@ -145,6 +147,9 @@ void APP_Tasks ( void )
         case APP_STATE_INIT:
         {
             bool appInitialized = true;
+            
+            //APP_start_ble(); // JOE EDIT OR ADDITION
+            
             //appData.appQueue = xQueueCreate( 10, sizeof(APP_Msg_T) );
             if(app_P2P_Phy_Init() != true)
             {
@@ -205,6 +210,24 @@ void APP_Tasks ( void )
     }
 }
 
+// JOE EDIT OR ADDITION START
+// type "ble" in the portal to start bluetooth and cause the failure
+void APP_start_ble(void)
+{
+    static bool started = false;
+    
+    if (started)
+    {
+        SYS_CONSOLE_PRINT("Bluetooth already started.\r\n");
+        return;
+    }
+    
+    SYS_CONSOLE_PRINT("Bluetooth started.\r\n");
+    APP_BleStackInit();
+    BLE_GAP_SetAdvEnable(true, 0);
+    started = true;
+}
+// JOE EDIT OR ADDITION END
 
 /*******************************************************************************
  End of File
