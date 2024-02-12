@@ -109,7 +109,6 @@ static void phy_ConfigAntennaDiversity(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, ch
 static void phy_ConfigRxRPCMode(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char** argv);
 static void update_PER_test_packets(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char** argv);
 static void throughput_timer_update(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char** argv);
-static void ble(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char** argv);    // JOE EDIT OR ADDITION
 //CMD descriptor table definition
 static const SYS_CMD_DESCRIPTOR PhyCmdsTbl[] =
 {
@@ -168,7 +167,6 @@ static const SYS_CMD_DESCRIPTOR PhyCmdsTbl[] =
     {"configAntennaDiversity",phy_ConfigAntennaDiversity,"Configure the Antenna Diversity\r\n"},
     {"updateThroughputTime",throughput_timer_update,"Update Throughput Timer\r\n"},
     {"updatePERTestPacketsCnt",update_PER_test_packets,"Update PER test Packets\r\n"},
-    {"ble",ble,"start bluetooth\r\n"},
 };
 
 
@@ -252,7 +250,7 @@ static void update_PER_test_packets(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char*
 {
     if(appPhyCmdProcessor_StrToUint64(argv[1],&appNwkParam.nPerTestPackets))
     {
-        SYS_CONSOLE_PRINT("\r\n No. of packets in PER test Mode set to %u\r\n",appNwkParam.nPerTestPackets);
+        SYS_CONSOLE_PRINT("\r\n No. of packets in PER test Mode set to 0x%x\r\n",appNwkParam.nPerTestPackets);
     }
 }
 
@@ -563,7 +561,7 @@ static void phy_pibgetChannelPage(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char** 
     appPhyCmdProcessor_PhyStatusPrint(status);
     if(status == PHY_SUCCESS)
     {
-      SYS_CONSOLE_PRINT("\r\n Channel Page - %x\n ",channelPage); 
+      SYS_CONSOLE_PRINT("\r\n Channel Page - %d\n ",channelPage); 
       appNwkParam.channelPage = channelPage;
     }
     else
@@ -599,7 +597,7 @@ static void phy_pibsetChannelPage(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char** 
     {
         if(PHY_PibGet(phyCurrentPage,&attribute_val) == PHY_SUCCESS)
         {
-            SYS_CONSOLE_PRINT("\r\n Channel Page - %x\n ",attribute_val); 
+            SYS_CONSOLE_PRINT("\r\n Channel Page - %d\n ",attribute_val); 
         }
       appNwkParam.channelPage = attribute_val;
     }
@@ -1289,9 +1287,17 @@ static void phy_ConfigRxRPCMode(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char** ar
         retVal = PHY_ConfigRxRPCMode(rxRPCEnable);
     }
     
-    if(PHY_SUCCESS == retVal)
+    if(PHY_SUCCESS == retVal && rxRPCEnable == 1U)
     {
         SYS_CONSOLE_MESSAGE("\r\nTrx is configured to reduced power consumption mode\r\n");
+    }
+    else if(PHY_SUCCESS == retVal && rxRPCEnable == 0U)
+    {
+        SYS_CONSOLE_MESSAGE("\r\nTrx reduced power consumption mode is disabled\r\n");
+}
+    else
+    {
+        //do nothing
     }
 }
 
@@ -1410,13 +1416,6 @@ static void setFrameTypes(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char** argv)
     }
     }
 }
-
-// JOE EDIT OR ADDITION START
-static void ble(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char** argv)
-{
-    APP_start_ble();
-}
-// JOE EDIT OR ADDITION END
 /**************************************************************************************************/
 
 bool appPhyCmdProcessor_StrToBool(const char *str, bool *res)

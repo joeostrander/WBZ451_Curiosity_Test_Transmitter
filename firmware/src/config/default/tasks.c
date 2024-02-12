@@ -52,6 +52,7 @@
 
 #include "configuration.h"
 #include "definitions.h"
+#include "sys_tasks.h"
 
 
 // *****************************************************************************
@@ -59,13 +60,8 @@
 // Section: RTOS "Tasks" Routine
 // *****************************************************************************
 // *****************************************************************************
-#define TASK_BLE_STACK_SIZE (2 *1024 / sizeof(portSTACK_TYPE))
-#define TASK_BLE_PRIORITY (tskIDLE_PRIORITY + 3)
-
-
-
 TaskHandle_t xSYS_CMD_Tasks;
-void _SYS_CMD_Tasks(  void *pvParameters  )
+void lSYS_CMD_Tasks(  void *pvParameters  )
 {
     while(1)
     {
@@ -78,9 +74,9 @@ void _SYS_CMD_Tasks(  void *pvParameters  )
 /* Handle for the APP_Tasks. */
 TaskHandle_t xPHY_Tasks;
 
-void _PHY_Tasks(  void *pvParameters  )
+static void _PHY_Tasks(  void *pvParameters  )
 {     
-    while(1)
+    while(true)
     {
         PHY_Tasks();
     }
@@ -88,12 +84,13 @@ void _PHY_Tasks(  void *pvParameters  )
 
 
 
+
 /* Handle for the APP_Tasks. */
 TaskHandle_t xAPP_Tasks;
 
-void _APP_Tasks(  void *pvParameters  )
+static void lAPP_Tasks(  void *pvParameters  )
 {   
-    while(1)
+    while(true)
     {
         APP_Tasks();
     }
@@ -119,7 +116,7 @@ void SYS_Tasks ( void )
 {
     /* Maintain system services */
     
-    xTaskCreate( _SYS_CMD_Tasks,
+    (void) xTaskCreate( lSYS_CMD_Tasks,
         "SYS_CMD_TASKS",
         SYS_CMD_RTOS_STACK_SIZE,
         (void*)NULL,
@@ -135,13 +132,8 @@ void SYS_Tasks ( void )
     
 
     /* Maintain Middleware & Other Libraries */
-    
-    if (xTaskCreate(BM_Task,     "BLE", TASK_BLE_STACK_SIZE, NULL  , TASK_BLE_PRIORITY, NULL) != pdPASS)
-        while (1);
-
-    
     /* Create FreeRTOS task for IEEE_802154_PHY */
-	xTaskCreate((TaskFunction_t) _PHY_Tasks,
+     (void)xTaskCreate((TaskFunction_t) _PHY_Tasks,
                 "PHY_Tasks",
                 1024,
                 NULL,
@@ -152,7 +144,7 @@ void SYS_Tasks ( void )
 
     /* Maintain the application's state machine. */
         /* Create OS Thread for APP_Tasks. */
-    xTaskCreate((TaskFunction_t) _APP_Tasks,
+    (void) xTaskCreate((TaskFunction_t) lAPP_Tasks,
                 "APP_Tasks",
                 1024,
                 NULL,

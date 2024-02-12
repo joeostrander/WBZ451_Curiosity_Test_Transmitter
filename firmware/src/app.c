@@ -54,8 +54,6 @@
 #include <string.h>
 #include "app.h"
 #include "definitions.h"
-#include "app_ble.h"
-#include "ble_gap.h"
 
 // *****************************************************************************
 // *****************************************************************************
@@ -178,19 +176,6 @@ void APP_Tasks ( void )
 
                         break;
                     }
-// TODO LATER
-//                    case APP_MSG_BLE_STACK_EVT:
-//                    {
-//                        // Pass BLE Stack Event Message to User Application for handling
-//                        APP_BleStackEvtHandler((STACK_Event_T *)p_appMsg->msgData);
-//                    }
-//                    break;
-//                    case APP_MSG_BLE_STACK_LOG:
-//                    {
-//                        // Pass BLE LOG Event Message to User Application for handling
-//                        APP_BleStackLogHandler((BT_SYS_LogEvent_T *)p_appMsg->msgData);
-//                    }
-//                    break;   
                     default:
                         break;
                 }
@@ -209,26 +194,6 @@ void APP_Tasks ( void )
         }
     }
 }
-
-// JOE EDIT OR ADDITION START
-// type "ble" in the portal to start bluetooth and cause the failure
-void APP_start_ble(void)
-{
-    static bool started = false;
-    
-    if (started)
-    {
-        SYS_CONSOLE_PRINT("Bluetooth already started.\r\n");
-        return;
-    }
-    
-    SYS_CONSOLE_PRINT("Bluetooth started.\r\n");
-    APP_BleStackInit();
-    BLE_GAP_SetAdvEnable(true, 0);
-    started = true;
-}
-// JOE EDIT OR ADDITION END
-
 /*******************************************************************************
  End of File
  */

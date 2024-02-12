@@ -95,8 +95,9 @@ typedef enum
 
 typedef enum APP_MsgId_T
 {
-    APP_MSG_BLE_STACK_EVT,
-    APP_MSG_BLE_STACK_LOG,
+
+
+
     APP_MSG_ZB_STACK_EVT,
     APP_MSG_ZB_STACK_CB,
     APP_MSG_STACK_END
@@ -211,7 +212,6 @@ void APP_Initialize ( void );
  */
 
 void APP_Tasks( void );
-void APP_start_ble(void);   // JOE EDIT OR ADDITION
 
 //DOM-IGNORE-BEGIN
 #ifdef __cplusplus
