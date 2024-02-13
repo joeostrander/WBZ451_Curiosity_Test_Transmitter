@@ -109,4 +109,7 @@ static void send_payload(void)
         uint8_t length = ptr - txData;
         app_P2P_Phy_TransmitFrame(txData, length, 1, seqNum++, true, false, false);
     }
+    
+    USER_LED_Toggle();
+    
 }

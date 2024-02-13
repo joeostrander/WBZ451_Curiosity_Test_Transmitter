@@ -4,7 +4,7 @@
 
 
 project: Curiosity_Test_Transmitter
-creation_date: 2024-02-12T11:46:09.486-06:00[America/Chicago]    # ISO 8601 format: https://www.w3.org/TR/NOTE-datetime
+creation_date: 2024-02-13T08:11:08.496-06:00[America/Chicago]    # ISO 8601 format: https://www.w3.org/TR/NOTE-datetime
 operating_system: Windows 10
 mcc_mode: IDE            # [IDE|Standalone|Headless]
 mcc_version: v5.3.7
@@ -14,8 +14,8 @@ harmony_version: v1.3.2
 compiler: XC32 (v4.30) 
 
 modules:
-    - {name: "csp", version: "v3.18.2"}
     - {name: "wireless_pic32cxbz_wbz", version: "v1.3.0"}
+    - {name: "csp", version: "v3.18.2"}
     - {name: "core", version: "v3.13.3"}
     - {name: "wireless_system_pic32cxbz_wbz", version: "v1.5.0"}
     - {name: "dev_packs", version: "v3.18.1"}

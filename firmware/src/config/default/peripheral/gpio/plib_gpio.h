@@ -61,6 +61,14 @@
 // *****************************************************************************
 // *****************************************************************************
 
+/*** Macros for USER_LED pin ***/
+#define USER_LED_Set()               (GPIOB_REGS->GPIO_LATSET = (1U<<7U))
+#define USER_LED_Clear()             (GPIOB_REGS->GPIO_LATCLR = (1U<<7U))
+#define USER_LED_Toggle()            (GPIOB_REGS->GPIO_LATINV= (1U<<7U))
+#define USER_LED_Get()               ((GPIOB_REGS->GPIO_PORT >> 7U) & 0x1U)
+#define USER_LED_OutputEnable()      (GPIOB_REGS->GPIO_TRISCLR = (1U<<7U))
+#define USER_LED_InputEnable()       (GPIOB_REGS->GPIO_TRISSET = (1U<<7U))
+#define USER_LED_PIN                  GPIO_PIN_RB7
 /*** Macros for BUTTON_1 pin ***/
 #define BUTTON_1_Set()               (GPIOB_REGS->GPIO_LATSET = (1U<<4U))
 #define BUTTON_1_Clear()             (GPIOB_REGS->GPIO_LATCLR = (1U<<4U))

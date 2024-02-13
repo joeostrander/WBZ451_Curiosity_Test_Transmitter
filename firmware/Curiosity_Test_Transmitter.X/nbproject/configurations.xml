@@ -692,7 +692,7 @@
         <property key="memories.programmemory" value="true"/>
         <property key="memories.programmemory.ranges" value="1000000-2001ffff"/>
         <property key="programmerToGoFilePath"
-                  value="C:/HarmonyProjects/firmware/Curiosity_Test_Transmitter.X/debug/default/Curiosity_Test_Transmitter_ptg"/>
+                  value="C:/HarmonyProjects/Curiosity_Test_Transmitter/firmware/Curiosity_Test_Transmitter.X/debug/default/Curiosity_Test_Transmitter_ptg"/>
         <property key="programoptions.donoteraseauxmem" value="false"/>
         <property key="programoptions.eraseb4program" value="true"/>
         <property key="programoptions.pgmentry.voltage" value="low"/>
